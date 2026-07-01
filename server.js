@@ -4,6 +4,14 @@ const session = require('express-session');
 const path = require('path');
 
 const app = express();
+const cors = require('cors');
+app.use(cors({
+  origin: [
+    'https://your-site.netlify.app',
+    'http://localhost:3000'
+  ],
+  credentials: true
+}));
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
