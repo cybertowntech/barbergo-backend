@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login — BarberGo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/design-system.css">
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+<body class="auth-page">
+<div class="auth-split">
+  <div class="auth-brand">
+    <a href="/" class="nav-logo auth-logo">
+      <span class="logo-mark logo-mark-lg">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M5 19 L12 4 L19 19" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="9" y="9" width="6" height="9.5" rx="1.5" stroke="white" stroke-width="1.6" transform="rotate(-10 12 13)"/>
+        </svg>
+      </span>
+      BarberGo
+    </a>
+    <div class="auth-brand-text">
+      <h2>Admin Panel</h2>
+      <p>Urus keseluruhan operasi BarberGo — barber, booking, revenue, dan semua lagi.</p>
+    </div>
+    <div class="auth-brand-blobs">
+      <div class="auth-blob blob-1"></div>
+      <div class="auth-blob blob-2"></div>
+    </div>
+  </div>
+  <div class="auth-form-panel">
+    <div class="auth-form-card">
+      <span class="eyebrow">Owner Portal</span>
+      <h2>Admin Login</h2>
+      <p class="muted">Akses terhad kepada pemilik perniagaan sahaja.</p>
+      <div id="authError" class="auth-error" style="display:none"></div>
+      <div class="auth-fields">
+        <label class="field-label">Emel</label>
+        <input type="email" id="authEmail" class="text-input" placeholder="admin@barbergo.my" autocomplete="email">
+        <label class="field-label">Kata Laluan</label>
+        <div class="pw-wrap">
+          <input type="password" id="authPassword" class="text-input" placeholder="••••••••" autocomplete="current-password">
+          <button class="pw-toggle" id="pwToggle" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 12S5 5 12 5s11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <button class="btn btn-primary btn-block" id="loginBtn">Log Masuk</button>
+      </div>
+      <p class="auth-foot"><a href="/">← Kembali ke laman utama</a></p>
+    </div>
+  </div>
+</div>
+<script src="/js/api.js"></script>
+<script>
+(function () {
+  document.getElementById('pwToggle').addEventListener('click', () => {
+    const pw = document.getElementById('authPassword');
+    pw.type = pw.type === 'password' ? 'text' : 'password';
+  });
+  async function login() {
+    const btn = document.getElementById('loginBtn');
+    const email = document.getElementById('authEmail').value.trim();
+    const password = document.getElementById('authPassword').value;
+    const errEl = document.getElementById('authError');
+    if (!email || !password) { errEl.textContent = 'Sila isi semua maklumat.'; errEl.style.display = 'block'; return; }
+    btn.textContent = 'Memuatkan...'; btn.disabled = true; errEl.style.display = 'none';
+    try {
+      await API.admin.login(email, password);
+      window.location.href = '/admin-dashboard.html';
+    } catch (err) {
+      errEl.textContent = err.message; errEl.style.display = 'block';
+      btn.textContent = 'Log Masuk'; btn.disabled = false;
+    }
+  }
+  document.getElementById('loginBtn').addEventListener('click', login);
+  document.addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+})();
+</script>
+</body>
+</html>
