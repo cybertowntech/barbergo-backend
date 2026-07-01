@@ -7,7 +7,7 @@ const app = express();
 const cors = require('cors');
 app.use(cors({
   origin: [
-    'https://your-site.netlify.app',
+    'https://barbergonow.netlify.app',
     'http://localhost:3000'
   ],
   credentials: true
